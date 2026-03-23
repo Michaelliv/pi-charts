@@ -61,14 +61,14 @@ function getOutputDir(cwd: string): string {
 
 export default function chartsExtension(pi: ExtensionAPI) {
 	pi.registerTool({
-		name: "charts_render",
+		name: "render_chart",
 		label: "Render Chart",
 		description:
 			"Render an ECharts JSON configuration to a PNG image.",
 		promptSnippet:
-			"Render ECharts JSON to PNG. Use charts_schema first to get the schema for a chart type.",
+			"Render ECharts JSON to PNG. Use chart_schema first to get the schema for a chart type.",
 		promptGuidelines: [
-			"Use charts_schema to get the JSON schema before building a chart config.",
+			"Use chart_schema to get the JSON schema before building a chart config.",
 			"Pass a complete ECharts option object as the `option` parameter.",
 			"The tool returns a rendered PNG image inline.",
 		],
@@ -152,7 +152,7 @@ export default function chartsExtension(pi: ExtensionAPI) {
 	});
 
 	pi.registerTool({
-		name: "charts_schema",
+		name: "chart_schema",
 		label: "Chart Schema",
 		description:
 			"Get the JSON schema for a chart type or component. Use type='list' to see all available types.",

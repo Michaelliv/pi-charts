@@ -19,31 +19,31 @@ Just ask pi to visualize data. The extension adds two tools the LLM calls automa
 - **"Heatmap of commits by day and hour"** → color-scaled grid
 - **"Radar chart comparing Alice and Bob's skills"** → overlaid radar polygons
 
-The LLM fetches the schema first (`charts_schema`), builds a valid ECharts config, then renders it (`charts_render`).
+The LLM fetches the schema first (`chart_schema`), builds a valid ECharts config, then renders it (`render_chart`).
 
 ## Tools
 
-### `charts_schema`
+### `chart_schema`
 
 Get the JSON schema for any chart type or component. The LLM uses this to build valid configs.
 
 ```
-charts_schema({ type: "list" })     # list all available types
-charts_schema({ type: "bar" })      # schema for bar series
-charts_schema({ type: "xAxis" })    # schema for xAxis component
-charts_schema({ type: "full" })     # complete EChartsOption schema
+chart_schema({ type: "list" })     # list all available types
+chart_schema({ type: "bar" })      # schema for bar series
+chart_schema({ type: "xAxis" })    # schema for xAxis component
+chart_schema({ type: "full" })     # complete EChartsOption schema
 ```
 
 **Series:** bar, line, pie, scatter, radar, funnel, gauge, treemap, boxplot, heatmap, candlestick, sankey
 
 **Components:** title, tooltip, grid, xAxis, yAxis, legend, dataZoom, visualMap, toolbox, dataset, radar-coord, polar, geo
 
-### `charts_render`
+### `render_chart`
 
 Render an ECharts JSON configuration to PNG.
 
 ```
-charts_render({
+render_chart({
   option: '{"xAxis":{...},"series":[...]}',
   width: 1200,
   height: 600,
@@ -78,9 +78,9 @@ On first render, `.charts/settings.json` is created with defaults:
 
 ## How it works
 
-1. LLM calls `charts_schema` to get the JSON schema for the chart type it needs
+1. LLM calls `chart_schema` to get the JSON schema for the chart type it needs
 2. LLM builds a valid ECharts option object using the schema
-3. LLM calls `charts_render` with the option JSON
+3. LLM calls `render_chart` with the option JSON
 4. Extension calls `charts-cli` SDK → ECharts server-side render → SVG → resvg → PNG
 5. PNG is returned inline as a base64 image (rendered via pi-tui `Image` component)
 6. PNG is also saved to `.charts/output/` if `saveToDisk` is enabled
