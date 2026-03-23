@@ -7,7 +7,7 @@ Ask pi to "chart this data" and get a rendered PNG — inline in the conversatio
 ## Install
 
 ```bash
-pi settings add-package npm:@miclivs/pi-charts
+pi install npm:@miclivs/pi-charts
 ```
 
 ## Usage
