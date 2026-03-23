@@ -1,6 +1,6 @@
 {
   "name": "@miclivs/pi-charts",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Pi extension for rendering charts — powered by charts-cli SDK",
   "type": "commonjs",
   "keywords": [

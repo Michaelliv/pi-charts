@@ -71,6 +71,8 @@ export default function chartsExtension(pi: ExtensionAPI) {
 			"Use chart_schema to get the JSON schema before building a chart config.",
 			"Pass a complete ECharts option object as the `option` parameter.",
 			"The tool returns a rendered PNG image inline.",
+			"Use fontSize 24 for labels, legends, and other text elements — the default is too small.",
+			"Do NOT use emoji in chart text (titles, labels, legends). The renderer lacks emoji font support and will show placeholder boxes instead.",
 		],
 		parameters: Type.Object({
 			option: Type.String({ description: "ECharts option as a JSON string" }),
@@ -196,6 +198,22 @@ export default function chartsExtension(pi: ExtensionAPI) {
 				content: [{ type: "text", text: JSON.stringify(schema, null, 2) }],
 				details: { type },
 			};
+		},
+
+		renderCall(params, _options, theme) {
+			const type = params.type || "list";
+			return new Text(theme.fg("muted", `chart_schema { type: "${type}" }`), 0, 0);
+		},
+
+		renderResult(result, _options, theme) {
+			const details = result.details;
+			let label: string;
+			if (details?.series) {
+				label = `${details.series.length} series, ${details.components.length} components`;
+			} else {
+				label = `schema for ${details?.type ?? "unknown"}`;
+			}
+			return new Text(theme.fg("muted", label), 0, 0);
 		},
 	});
 }
