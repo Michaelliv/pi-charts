@@ -1,35 +1,58 @@
 # pi-charts
 
-Pi extension for rendering charts. Powered by [charts-cli](https://github.com/Michaelliv/charts-cli) SDK.
+Chart rendering for [pi](https://github.com/badlogic/pi-mono). Powered by [charts-cli](https://github.com/Michaelliv/charts-cli) SDK and [ECharts](https://echarts.apache.org/).
+
+Ask pi to "chart this data" and get a rendered PNG — inline in the conversation and saved to disk. Bar, line, pie, scatter, radar, funnel, gauge, treemap, boxplot, heatmap, candlestick, sankey — all 12 ECharts series types, plus full component support.
 
 ## Install
 
 ```bash
-pi settings add-package npm:pi-charts
+pi install npm:pi-charts
 ```
+
+## Usage
+
+Just ask pi to visualize data. The extension adds two tools the LLM calls automatically:
+
+- **"Plot monthly revenue as a bar chart"** → grouped bar chart with legend
+- **"Show a pie chart of browser market share"** → pie with labeled segments
+- **"Heatmap of commits by day and hour"** → color-scaled grid
+- **"Radar chart comparing Alice and Bob's skills"** → overlaid radar polygons
+
+The LLM fetches the schema first (`charts_schema`), builds a valid ECharts config, then renders it (`charts_render`).
 
 ## Tools
 
-### `charts_render`
-
-Render an ECharts JSON configuration to a PNG image.
-
-```
-charts_render({ option: '{"xAxis":{...},"series":[...]}' })
-```
-
-Options: `width`, `height`, `theme` (`dark`, `vintage`), `filename`.
-
 ### `charts_schema`
 
-Get the JSON schema for a chart type or component.
+Get the JSON schema for any chart type or component. The LLM uses this to build valid configs.
 
 ```
-charts_schema({ type: "bar" })
-charts_schema({ type: "list" })
+charts_schema({ type: "list" })     # list all available types
+charts_schema({ type: "bar" })      # schema for bar series
+charts_schema({ type: "xAxis" })    # schema for xAxis component
+charts_schema({ type: "full" })     # complete EChartsOption schema
 ```
 
-Supports: bar, line, pie, scatter, radar, funnel, gauge, treemap, boxplot, heatmap, candlestick, sankey, and all ECharts components.
+**Series:** bar, line, pie, scatter, radar, funnel, gauge, treemap, boxplot, heatmap, candlestick, sankey
+
+**Components:** title, tooltip, grid, xAxis, yAxis, legend, dataZoom, visualMap, toolbox, dataset, radar-coord, polar, geo
+
+### `charts_render`
+
+Render an ECharts JSON configuration to PNG.
+
+```
+charts_render({
+  option: '{"xAxis":{...},"series":[...]}',
+  width: 1200,
+  height: 600,
+  theme: "dark",
+  filename: "revenue"
+})
+```
+
+The image renders inline in the conversation via a custom `renderResult` component. If `saveToDisk` is enabled (default), it's also written to `.charts/output/`.
 
 ## Settings
 
@@ -50,5 +73,20 @@ On first render, `.charts/settings.json` is created with defaults:
 | `saveToDisk` | `true` | Save rendered PNGs to `.charts/output/` |
 | `width` | `1200` | Default image width in pixels |
 | `height` | `600` | Default image height in pixels |
-| `defaultTheme` | `"dark"` | Default ECharts theme |
-| `maxWidthCells` | `90` | Max terminal width for inline image display |
+| `defaultTheme` | `"dark"` | Default ECharts theme (`dark`, `vintage`, or `null` for light) |
+| `maxWidthCells` | `90` | Max terminal cell width for inline image display |
+
+## How it works
+
+1. LLM calls `charts_schema` to get the JSON schema for the chart type it needs
+2. LLM builds a valid ECharts option object using the schema
+3. LLM calls `charts_render` with the option JSON
+4. Extension calls `charts-cli` SDK → ECharts server-side render → SVG → resvg → PNG
+5. PNG is returned inline as a base64 image (rendered via pi-tui `Image` component)
+6. PNG is also saved to `.charts/output/` if `saveToDisk` is enabled
+
+No browser. No GUI. No network requests. Everything runs locally via ECharts SSR.
+
+## License
+
+MIT
