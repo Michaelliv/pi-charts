@@ -68,19 +68,20 @@ export default function chartsExtension(pi: ExtensionAPI) {
 		promptSnippet:
 			"Render ECharts JSON to PNG. Use chart_schema first to get the schema for a chart type.",
 		promptGuidelines: [
-			"Use chart_schema to get the JSON schema before building a chart config.",
+			"Always call chart_schema first to get the JSON schema before building a chart config — do not render without reading the schema.",
 			"Pass a complete ECharts option object as the `option` parameter.",
 			"The tool returns a rendered PNG image inline.",
+			"Default size is 1200x600 — do not pass width/height unless the user requests a specific size.",
 			"Use fontSize 24 for labels, legends, and other text elements — the default is too small.",
 			"Do NOT use emoji in chart text (titles, labels, legends). The renderer lacks emoji font support and will show placeholder boxes instead.",
 		],
 		parameters: Type.Object({
 			option: Type.String({ description: "ECharts option as a JSON string" }),
 			width: Type.Optional(
-				Type.Number({ description: "Width in pixels (default: 800)" }),
+				Type.Number({ description: "Width in pixels (default: 1200)" }),
 			),
 			height: Type.Optional(
-				Type.Number({ description: "Height in pixels (default: 400)" }),
+				Type.Number({ description: "Height in pixels (default: 600)" }),
 			),
 			theme: Type.Optional(
 				Type.String({ description: "Theme: dark, vintage" }),

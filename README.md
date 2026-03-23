@@ -2,7 +2,9 @@
 
 Chart rendering for [pi](https://github.com/badlogic/pi-mono). Powered by [charts-cli](https://github.com/Michaelliv/charts-cli) SDK and [ECharts](https://echarts.apache.org/).
 
-Ask pi to "chart this data" and get a rendered PNG — inline in the conversation and saved to disk. Bar, line, pie, scatter, radar, funnel, gauge, treemap, boxplot, heatmap, candlestick, sankey — all 12 ECharts series types, plus full component support.
+Ask pi to "chart this data" and get a rendered PNG, inline in the conversation and saved to disk. Bar, line, pie, scatter, radar, funnel, gauge, treemap, boxplot, heatmap, candlestick, sankey. All 12 ECharts series types, plus full component support.
+
+![pi-charts demo](demo.gif)
 
 ## Install
 
