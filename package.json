@@ -1,0 +1,25 @@
+{
+  "name": "pi-charts",
+  "version": "0.1.0",
+  "description": "Pi extension for rendering charts — powered by charts-cli SDK",
+  "type": "commonjs",
+  "keywords": [
+    "pi-package"
+  ],
+  "pi": {
+    "extensions": [
+      ".pi/extensions/charts"
+    ]
+  },
+  "dependencies": {
+    "charts-cli": "^0.3.1"
+  },
+  "peerDependencies": {
+    "@mariozechner/pi-ai": "*",
+    "@mariozechner/pi-coding-agent": "*",
+    "@mariozechner/pi-tui": "*",
+    "@sinclair/typebox": "*"
+  },
+  "author": "michaelliv",
+  "license": "MIT"
+}
